@@ -1,0 +1,27 @@
+@import './base.css';
+
+/* 這一區塊非常重要，必須保留，確保滿版 */
+html, body, #app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* --- 下面這些是原本的連結樣式，留著或刪除都可以，不影響排版 --- */
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+/* ⚠️⚠️⚠️ 下面這段 @media (min-width: 1024px) ... 請全部刪除！ ⚠️⚠️⚠️ */
+/* 因為它強制將 #app 設為 grid 並且限制了 padding，導致右側空白 */

@@ -1,25 +1,26 @@
 <template>
-    <div>後台首頁<el-button @click="addcount">{{ count }}</el-button>
-    <el-button type="primary" @click="addcount2">{{ form.count }}</el-button></div>
+    <div>後台首頁</div>
+    <el-button @click="setCookie">設置</el-button>
+    <el-button @click="getCookie">讀取</el-button>
+    <el-button @click="deleteCookie">刪除</el-button>
 </template>
 
 <script setup>
-    import { ref, reactive } from 'vue'
+import { ref, reactive } from 'vue'
+import { useCookies } from '@vueuse/integrations/useCookies'
 
-    let count = ref(1)
+const cookie = useCookies()
+console.log(cookie)
 
-    function addcount(){
-        console.log('add count')
-        count.value++
-    }
+function setCookie(){
+    cookie.set('admin-token','123456',)
+}
 
-    const form = reactive({
-        count:1
-    })
+function getCookie(){
+    console.log(cookie.get('admin-token'))
+}
 
-    function addcount2(){
-        form.count++
-        console.log(form.count)
-    }
-
+function deleteCookie(){
+    cookie.remove('admin-token')
+}
 </script>    

@@ -30,7 +30,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button round color="#626aef" class="w-[250px]"
-                    type="primary" @click="onSubmit">登入</el-button>
+                    type="primary" @click="onSubmit" :loading="loading">登入</el-button>
                 </el-form-item>
             </el-form>
         </el-col>    
@@ -39,9 +39,10 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { login } from '~/api/manager.js'
+import { login,getInfo } from '~/api/manager.js'
 import { ElNotification } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { useCookies } from '@vueuse/integrations/useCookies'
 
 //取得router實例
 const router = useRouter()
@@ -63,17 +64,22 @@ const rules = {
           trigger: 'blur' }
        ]
 }
-
+//取得form表單實例
 const formRef = ref(null)
+//加載狀態
+const loading =ref(false)
 
 const  onSubmit = () => {
     formRef.value.validate((valid) => {
         if (!valid) {
             return false
         }
+        //請求之前啟動加載狀態
+        loading.value = true
+        //login方法
         login(form.username, form.password)//從form中取得使用者輸入的帳號密碼
         .then(res => {
-            console.log(res.data.data);
+            console.log(res);
 
             //提示成功
             ElNotification({
@@ -81,18 +87,21 @@ const  onSubmit = () => {
                 type: 'success',
                 duration: 3000
             })
-            //存儲用户Token和用户信息
+            //存儲用户Token和用户信息到Cookie中
+            const cookie = useCookies()
+            cookie.set("admin-token",res.token)
 
+            //獲得用户信息
+            getInfo().then(res2 => {
+                console.log(res2);
+            })
+            
             //跳轉到後台首頁
             router.push('/')
         })
-        .catch(err => {
-            ElNotification({
-                title: 'Error',
-                message: err.response.data.msg ||'登入失敗',
-                type: 'error',
-                duration: 3000
-            })
+        .finally(() => {
+            //請求結束後關閉加載狀態
+            loading.value = false
         })
     })
 }

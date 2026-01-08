@@ -10,4 +10,4 @@ import router from './router';
 
 <style scoped>
 
-</style>
+</style> 

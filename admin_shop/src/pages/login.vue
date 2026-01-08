@@ -39,13 +39,17 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { login,getInfo } from '~/api/manager.js'
-import { ElNotification } from 'element-plus'
+import { login } from '~/api/manager.js'
 import { useRouter } from 'vue-router'
-import { useCookies } from '@vueuse/integrations/useCookies'
+import { useStore } from 'vuex'
+import { setToken } from '~/composables/auth.js'
+import { toast } from '~/composables/util.js'
 
 //取得router實例
 const router = useRouter()
+
+//取得store實例
+const store = useStore()
 
 //定義form資料結構
 const form = reactive({
@@ -82,19 +86,9 @@ const  onSubmit = () => {
             console.log(res);
 
             //提示成功
-            ElNotification({
-                message: '登入成功',
-                type: 'success',
-                duration: 3000
-            })
+            toast('登入成功')
             //存儲用户Token和用户信息到Cookie中
-            const cookie = useCookies()
-            cookie.set("admin-token",res.token)
-
-            //獲得用户信息
-            getInfo().then(res2 => {
-                console.log(res2);
-            })
+            setToken(res.token)
             
             //跳轉到後台首頁
             router.push('/')
@@ -108,14 +102,14 @@ const  onSubmit = () => {
 </script>
 
 <style scoped>
-    .login-container {
-        @apply min-h-screen bg-indigo-500;
-    }
-    .login-container .left ,.login-container .right     {
-        @apply flex items-center justify-center;
-    }
-    .login-container .right {
-    @apply bg-light-50  flex-col;
+.login-container {
+    @apply min-h-screen bg-indigo-500;
+}
+.login-container .left ,.login-container .right     {
+    @apply flex items-center justify-center;
+}
+.login-container .right {
+@apply bg-light-50  flex-col;
 }
 .left>div>div:first-child {
     @apply font-bold text-5xl text-light-50 mb-4;

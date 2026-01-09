@@ -16,7 +16,7 @@ router.beforeEach( async (to, from, next) => {
     }
     //如果已經登錄則不能前往登入頁面
     if(token && to.path =='/login'){
-        toast("請密重覆登錄", "error")
+        toast("請勿重覆登錄", "error")
         return next({path:from.path ? from.path : '/'})
     }
     //如果用戶已經登錄就自動獲取用戶信息,并存儲到token中

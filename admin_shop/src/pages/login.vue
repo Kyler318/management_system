@@ -38,11 +38,9 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import { login } from '~/api/manager.js'
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { setToken } from '~/composables/auth.js'
 import { toast } from '~/composables/util.js'
 
 //取得router實例
@@ -80,25 +78,30 @@ const  onSubmit = () => {
         }
         //請求之前啟動加載狀態
         loading.value = true
-        //login方法
-        login(form.username, form.password)//從form中取得使用者輸入的帳號密碼
-        .then(res => {
-            console.log(res);
 
-            //提示成功
-            toast('登入成功')
-            //存儲用户Token和用户信息到Cookie中
-            setToken(res.token)
-            
-            //跳轉到後台首頁
-            router.push('/')
-        })
-        .finally(() => {
-            //請求結束後關閉加載狀態
+        store.dispatch("login", form).then(res =>{
+            toast("登錄成功")
+            router.push("/")
+        }).finally(() =>{
             loading.value = false
         })
     })
 }
+//監聽回車方法事件
+function onKeyUp(e){
+    if (e.key == 'Enter'){
+        onSubmit()
+    }
+}
+
+//添加鍵盤監聽
+onMounted(() => {
+    document.addEventListener("keyup", onKeyUp)
+})
+//移除鍵盤監聽
+onBeforeUnmount(() => {
+    document.removeEventListener("keyup",onKeyUp)
+})
 </script>
 
 <style scoped>

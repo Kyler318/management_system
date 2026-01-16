@@ -1,5 +1,5 @@
 import { ElNotification, ElMessageBox } from "element-plus"
-
+import { nprogress } from 'nprogress'
 //消息提示
 export function toast(message, type = 'success', dangerouslyUseHTMLString= false){
     ElNotification({
@@ -19,4 +19,13 @@ export function showModal(content = "提示內容", type = "warning", title=""){
                 type,
             }
     )
+}
+
+//顯示全屏loading
+export function showFullLoading(){
+    nprogress.start()
+}
+//隠蔵全屏loading
+export function hideFullLoading(){
+    nprogress.done()
 }

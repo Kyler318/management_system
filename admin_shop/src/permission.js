@@ -1,10 +1,12 @@
 import router from '~/router/index.js'
 import { getToken } from '~/composables/auth.js'
-import { toast } from '~/composables/util.js'
+import { toast, showFullLoading, hideFullLoading } from '~/composables/util.js'
 import store from './store/index.js'
 
 //路由全域守衛
 router.beforeEach( async (to, from, next) => {
+    //顯示Loading
+    showFullLoading()
     //判斷是否前往登入頁面
     console.log("進入路由守衛");
     const token = getToken();

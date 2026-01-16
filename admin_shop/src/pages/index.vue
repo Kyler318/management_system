@@ -21,7 +21,7 @@ const store = useStore()
             .finally(() =>{
                 store.dispatch('logout')
                 //跳轉回登錄頁
-                router.push('/')
+                router.push('/login')
                 //提示退出成功
                 toast('退出登錄成功')
             })
